@@ -1,0 +1,244 @@
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "../../context/LanguageContext";
+
+const Header: React.FC = () => {
+  const { t } = useTranslation();
+  const { currentLanguage, changeLanguage, availableLanguages } = useLanguage();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLanguageOpen, setIsLanguageOpen] = useState(false);
+  const location = useLocation();
+
+  const toggleMenu = (): void => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const toggleLanguageDropdown = (): void => {
+    setIsLanguageOpen(!isLanguageOpen);
+  };
+
+  const handleLanguageChange = (langCode: string): void => {
+    changeLanguage(langCode);
+    setIsLanguageOpen(false);
+  };
+
+  const getCurrentLanguage = () => {
+    return availableLanguages.find((lang) => lang.code === currentLanguage);
+  };
+
+  const isActiveLink = (path: string): boolean => {
+    return location.pathname === path;
+  };
+
+  return (
+    <header className="w-full bg-white shadow-lg relative z-50">
+      {/* Top header with logo and language selector */}
+      <div className="bg-green-700 text-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex justify-between items-center py-3">
+            <div className="flex items-center space-x-3">
+              <img
+                src="/src/assets/images/logo.png"
+                alt="Smile Eye Charity"
+                className="w-10 h-10 object-contain"
+              />
+              <Link
+                to="/"
+                className="text-xl font-bold text-white hover:text-gray-200 transition-colors"
+              >
+                Smile Eye Charity
+              </Link>
+            </div>
+
+            {/* Language Selector */}
+            <div className="relative">
+              <button
+                className="flex items-center space-x-2 px-3 py-2 rounded-md bg-green-600 hover:bg-green-500 transition-colors"
+                onClick={toggleLanguageDropdown}
+              >
+                <img
+                  src={getCurrentLanguage()?.flag}
+                  alt={getCurrentLanguage()?.name}
+                  className="w-6 h-4 object-cover rounded"
+                />
+                <span className="text-sm font-medium">
+                  {getCurrentLanguage()?.name}
+                </span>
+                <svg
+                  className={`w-4 h-4 transition-transform ${
+                    isLanguageOpen ? "rotate-180" : ""
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+
+              {isLanguageOpen && (
+                <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                  {availableLanguages.map((language) => (
+                    <button
+                      key={language.code}
+                      className={`w-full flex items-center space-x-3 px-4 py-2 text-left hover:bg-gray-50 transition-colors ${
+                        currentLanguage === language.code
+                          ? "bg-green-50 text-green-700"
+                          : "text-gray-700"
+                      }`}
+                      onClick={() => handleLanguageChange(language.code)}
+                    >
+                      <img
+                        src={language.flag}
+                        alt={language.name}
+                        className="w-6 h-4 object-cover rounded"
+                      />
+                      <span className="text-sm font-medium">
+                        {language.name}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Navigation */}
+      <nav className="bg-white border-t border-gray-200">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex justify-between items-center">
+            {/* Mobile menu button */}
+            <button
+              className="md:hidden flex flex-col justify-center items-center w-8 h-8 space-y-1"
+              onClick={toggleMenu}
+              aria-label="Toggle menu"
+            >
+              <span
+                className={`block w-6 h-0.5 bg-gray-600 transition-all ${
+                  isMenuOpen ? "rotate-45 translate-y-1.5" : ""
+                }`}
+              ></span>
+              <span
+                className={`block w-6 h-0.5 bg-gray-600 transition-all ${
+                  isMenuOpen ? "opacity-0" : ""
+                }`}
+              ></span>
+              <span
+                className={`block w-6 h-0.5 bg-gray-600 transition-all ${
+                  isMenuOpen ? "-rotate-45 -translate-y-1.5" : ""
+                }`}
+              ></span>
+            </button>
+
+            {/* Navigation menu */}
+            <ul
+              className={`${
+                isMenuOpen
+                  ? "flex flex-col absolute top-full left-0 w-full bg-white shadow-lg py-4 space-y-2 md:relative md:flex-row md:shadow-none md:py-0 md:space-y-0 md:space-x-8"
+                  : "hidden md:flex md:flex-row md:space-x-8"
+              } transition-all duration-300`}
+            >
+              <li>
+                <Link
+                  to="/"
+                  className={`block px-4 py-2 font-medium transition-colors hover:text-green-600 ${
+                    isActiveLink("/")
+                      ? "text-green-600 border-b-2 border-green-600"
+                      : "text-gray-700"
+                  }`}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {t("home")}
+                </Link>
+              </li>
+              {/* <li>
+                <a
+                  href="/#activities"
+                  className="block px-4 py-2 font-medium text-gray-700 hover:text-green-600 transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {t("activities")}
+                </a>
+              </li> */}
+              <li>
+                <Link
+                  to="/blog"
+                  className={`block px-4 py-2 font-medium transition-colors hover:text-green-600 ${
+                    isActiveLink("/blog")
+                      ? "text-green-600 border-b-2 border-green-600"
+                      : "text-gray-700"
+                  }`}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Blog
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/achievement"
+                  className={`block px-4 py-2 font-medium transition-colors hover:text-green-600 ${
+                    isActiveLink("/achievement")
+                      ? "text-green-600 border-b-2 border-green-600"
+                      : "text-gray-700"
+                  }`}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Achievement
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/contributors"
+                  className={`block px-4 py-2 font-medium transition-colors hover:text-green-600 ${
+                    isActiveLink("/contributors")
+                      ? "text-green-600 border-b-2 border-green-600"
+                      : "text-gray-700"
+                  }`}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {t("contributors")}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/contribute"
+                  className={`block px-4 py-2 font-medium transition-colors hover:text-green-600 ${
+                    isActiveLink("/contribute")
+                      ? "text-green-600 border-b-2 border-green-600"
+                      : "text-gray-700"
+                  }`}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {t("contribute")}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/qa-contact"
+                  className={`block px-4 py-2 font-medium transition-colors hover:text-green-600 ${
+                    isActiveLink("/qa-contact")
+                      ? "text-green-600 border-b-2 border-green-600"
+                      : "text-gray-700"
+                  }`}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Q&A & Contact
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  );
+};
+
+export default Header;
