@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../context/LanguageContext";
@@ -9,6 +9,24 @@ const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
   const location = useLocation();
+  const languageDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        languageDropdownRef.current &&
+        !languageDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsLanguageOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const toggleMenu = (): void => {
     setIsMenuOpen(!isMenuOpen);
@@ -56,7 +74,7 @@ const Header: React.FC = () => {
             </div>
 
             {/* Language Selector */}
-            <div className="relative">
+            <div className="relative" ref={languageDropdownRef}>
               <button
                 className="flex items-center space-x-2 px-3 py-2 rounded-md bg-green-600 hover:bg-green-500 transition-colors"
                 onClick={toggleLanguageDropdown}
@@ -87,7 +105,7 @@ const Header: React.FC = () => {
               </button>
 
               {isLanguageOpen && (
-                <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-[9999] overflow-hidden">
                   {availableLanguages.map((language) => (
                     <button
                       key={language.code}
@@ -101,9 +119,9 @@ const Header: React.FC = () => {
                       <img
                         src={language.flag}
                         alt={language.name}
-                        className="w-6 h-4 object-cover rounded"
+                        className="w-6 h-4 object-cover rounded flex-shrink-0"
                       />
-                      <span className="text-sm font-medium">
+                      <span className="text-sm font-medium whitespace-nowrap">
                         {language.name}
                       </span>
                     </button>
