@@ -24,17 +24,20 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
   const { i18n } = useTranslation();
 
   const availableLanguages: Language[] = [
-    { code: "en", name: "English", flag: "/src/assets/images/flag.jpg" },
-    { code: "vn", name: "Vietnamese", flag: "/src/assets/images/vietnam.jpg" },
-    { code: "jp", name: "Japanese", flag: "/src/assets/images/japanese.png" },
+    { code: "en", name: "English", flag: "/flag.jpg" },
+    { code: "vn", name: "Vietnamese", flag: "/vietnam.jpg" },
+    { code: "jp", name: "Japanese", flag: "/japanese.png" },
   ];
 
   const changeLanguage = (lang: string): void => {
     i18n.changeLanguage(lang);
   };
 
+  // Ensure we always have a current language, defaulting to 'en' if none is set
+  const currentLanguage = i18n.language || i18n.resolvedLanguage || "en";
+
   const value: LanguageContextType = {
-    currentLanguage: i18n.language || "en",
+    currentLanguage,
     changeLanguage,
     availableLanguages,
   };

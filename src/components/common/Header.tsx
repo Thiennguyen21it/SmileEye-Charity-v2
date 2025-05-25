@@ -24,7 +24,11 @@ const Header: React.FC = () => {
   };
 
   const getCurrentLanguage = () => {
-    return availableLanguages.find((lang) => lang.code === currentLanguage);
+    const language = availableLanguages.find(
+      (lang) => lang.code === currentLanguage
+    );
+    // Fallback to first available language if current language is not found
+    return language || availableLanguages[0];
   };
 
   const isActiveLink = (path: string): boolean => {
@@ -39,7 +43,7 @@ const Header: React.FC = () => {
           <div className="flex justify-between items-center py-3">
             <div className="flex items-center space-x-3">
               <img
-                src="/src/assets/images/logo.png"
+                src="/logo.png"
                 alt="Smile Eye Charity"
                 className="w-10 h-10 object-contain"
               />
@@ -58,12 +62,12 @@ const Header: React.FC = () => {
                 onClick={toggleLanguageDropdown}
               >
                 <img
-                  src={getCurrentLanguage()?.flag}
-                  alt={getCurrentLanguage()?.name}
+                  src={getCurrentLanguage().flag}
+                  alt={getCurrentLanguage().name}
                   className="w-6 h-4 object-cover rounded"
                 />
                 <span className="text-sm font-medium">
-                  {getCurrentLanguage()?.name}
+                  {getCurrentLanguage().name}
                 </span>
                 <svg
                   className={`w-4 h-4 transition-transform ${
