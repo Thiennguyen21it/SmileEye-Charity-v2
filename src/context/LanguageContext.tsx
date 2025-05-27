@@ -36,9 +36,9 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
   );
 
   const availableLanguages: Language[] = [
-    { code: "en", name: "English", flag: "/flag.jpg" },
-    { code: "vn", name: "Vietnamese", flag: "/vietnam.jpg" },
-    { code: "jp", name: "Japanese", flag: "/japanese.png" },
+    { code: "en", name: "English", flag: "flag.jpg" },
+    { code: "vn", name: "Vietnamese", flag: "vietnam.jpg" },
+    { code: "jp", name: "Japanese", flag: "japanese.png" },
   ];
 
   // Listen for language changes from i18next

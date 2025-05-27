@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: process.env.NODE_ENV === "production" ? "/SmileEye-Charity-v2/" : "/", // Use correct repository name for GitHub Pages
+  base: process.env.NODE_ENV === "production" ? "/SmileEye-charity-v2/" : "/", // Corrected repository name for GitHub Pages
   build: {
     outDir: "dist",
     sourcemap: false, // Disable sourcemaps in production

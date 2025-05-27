@@ -98,7 +98,7 @@ const Header: React.FC = () => {
           <div className="flex justify-between items-center py-3">
             <div className="flex items-center space-x-3">
               <img
-                src="/logo.png"
+                src={`${import.meta.env.BASE_URL}logo.png`}
                 alt="Smile Eye Charity"
                 className="w-10 h-10 object-contain"
               />
@@ -121,7 +121,9 @@ const Header: React.FC = () => {
                 aria-label="Change language"
               >
                 <img
-                  src={getCurrentLanguage().flag}
+                  src={`${import.meta.env.BASE_URL}${
+                    getCurrentLanguage().flag
+                  }`}
                   alt={getCurrentLanguage().name}
                   className="w-6 h-4 object-cover rounded"
                 />
@@ -167,7 +169,7 @@ const Header: React.FC = () => {
                       disabled={currentLanguage === language.code}
                     >
                       <img
-                        src={language.flag}
+                        src={`${import.meta.env.BASE_URL}${language.flag}`}
                         alt={language.name}
                         className="w-6 h-4 object-cover rounded flex-shrink-0"
                       />
