@@ -1,6 +1,6 @@
 # 🌟 SmileEye Charity v2
 
-A modern, responsive charity website built with React, TypeScript, and Tailwind CSS to support Co-tu communities in Vietnam.
+A modern, responsive charity A web platform that supports Smile Eye Charity in managing volunteer activities, fundraising, and reporting progress. The system includes project listings, volunteer registration, donation tracking, and communication features to support Co-tu communities in Vietnam.
 
 ## ✨ Features
 
