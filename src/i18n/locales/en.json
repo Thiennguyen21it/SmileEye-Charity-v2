@@ -1,7 +1,8 @@
 {
   "home": "Home",
   "activities": "Activities",
-  "achievement": "Blog",
+  "blog": "Blog",
+  "achievement": "Achievement",
   "contributors": "Contributors",
   "QA": "Q&A",
   "contact": "Contact",
@@ -124,5 +125,6 @@
   "contact_us_contribute": "Contact us today to learn more about contribution opportunities",
   "apply_volunteer": "Apply to Volunteer",
   "donate_now": "Donate Now",
-  "learn_more": "Learn More"
+  "learn_more": "Learn More",
+  "qa_contact": "Q&A & Contact"
 }

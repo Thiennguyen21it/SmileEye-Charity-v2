@@ -6,8 +6,12 @@ export interface Language {
 
 export interface LanguageContextType {
   currentLanguage: string;
-  changeLanguage: (lang: string) => void;
+  changeLanguage: (lang: string) => Promise<void>;
   availableLanguages: Language[];
+  isChangingLanguage: boolean;
+  translate: (key: string) => string;
+  error: string | null;
+  clearError: () => void;
 }
 
 export interface ContactFormData {

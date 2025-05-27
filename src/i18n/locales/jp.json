@@ -1,6 +1,7 @@
 {
   "home": "ホーム",
   "activities": "アクティビティ",
+  "blog": "ブログ",
   "achievement": "達成",
   "contributors": "貢献者",
   "QA": "Q&A",
@@ -91,5 +92,6 @@
   "contact_us_contribute": "貢献機会について詳しく知るために、今日お問い合わせください",
   "apply_volunteer": "ボランティアに応募",
   "donate_now": "今すぐ寄付",
-  "learn_more": "詳しく学ぶ"
+  "learn_more": "詳しく学ぶ",
+  "qa_contact": "Q&A & お問い合わせ"
 }

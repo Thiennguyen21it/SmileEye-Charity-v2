@@ -35,6 +35,19 @@ i18n
       order: ["localStorage", "navigator", "htmlTag"],
       caches: ["localStorage"],
     },
+
+    // Enable proper async support
+    react: {
+      useSuspense: false, // Set to false to handle loading states manually
+    },
+
+    // Ensure language changes complete properly
+    load: "languageOnly",
+    cleanCode: true,
+
+    // Add timeout for language loading
+    ns: ["translation"],
+    defaultNS: "translation",
   });
 
 export default i18n;

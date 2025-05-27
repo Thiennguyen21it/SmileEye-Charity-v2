@@ -1,6 +1,7 @@
 {
   "home": "Trang chủ",
   "activities": "Hoạt động",
+  "blog": "Blog",
   "achievement": "Thành tựu",
   "contributors": "Nhà hảo tâm",
   "QA": "Q&A",
@@ -93,5 +94,6 @@
   "contact_us_contribute": "Liên hệ với chúng tôi ngay hôm nay để tìm hiểu thêm về các cơ hội đóng góp",
   "apply_volunteer": "Đăng ký tình nguyện",
   "donate_now": "Quyên góp ngay",
-  "learn_more": "Tìm hiểu thêm"
+  "learn_more": "Tìm hiểu thêm",
+  "qa_contact": "Q&A & Liên hệ"
 }

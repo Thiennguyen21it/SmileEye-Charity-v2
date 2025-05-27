@@ -5,7 +5,14 @@ import { useLanguage } from "../../context/LanguageContext";
 
 const Header: React.FC = () => {
   const { t } = useTranslation();
-  const { currentLanguage, changeLanguage, availableLanguages } = useLanguage();
+  const {
+    currentLanguage,
+    changeLanguage,
+    availableLanguages,
+    isChangingLanguage,
+    error,
+    clearError,
+  } = useLanguage();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
   const location = useLocation();
@@ -28,17 +35,34 @@ const Header: React.FC = () => {
     };
   }, []);
 
+  // Clear error when component unmounts or dropdown closes
+  useEffect(() => {
+    if (!isLanguageOpen && error) {
+      const timer = setTimeout(() => {
+        clearError();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [isLanguageOpen, error, clearError]);
+
   const toggleMenu = (): void => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   const toggleLanguageDropdown = (): void => {
-    setIsLanguageOpen(!isLanguageOpen);
+    if (!isChangingLanguage) {
+      setIsLanguageOpen(!isLanguageOpen);
+    }
   };
 
-  const handleLanguageChange = (langCode: string): void => {
-    changeLanguage(langCode);
-    setIsLanguageOpen(false);
+  const handleLanguageChange = async (langCode: string): Promise<void> => {
+    try {
+      await changeLanguage(langCode);
+      setIsLanguageOpen(false);
+    } catch (error) {
+      console.error("Failed to change language:", error);
+      // Error is now handled by the context, just keep dropdown open
+    }
   };
 
   const getCurrentLanguage = () => {
@@ -55,6 +79,19 @@ const Header: React.FC = () => {
 
   return (
     <header className="w-full bg-white shadow-lg relative z-50">
+      {/* Error notification */}
+      {error && (
+        <div className="bg-red-600 text-white text-center py-2 px-4 text-sm">
+          <span>{error}</span>
+          <button
+            onClick={clearError}
+            className="ml-2 text-white hover:text-red-200"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
       {/* Top header with logo and language selector */}
       <div className="bg-green-700 text-white">
         <div className="max-w-7xl mx-auto px-4">
@@ -76,8 +113,12 @@ const Header: React.FC = () => {
             {/* Language Selector */}
             <div className="relative" ref={languageDropdownRef}>
               <button
-                className="flex items-center space-x-2 px-3 py-2 rounded-md bg-green-600 hover:bg-green-500 transition-colors"
+                className={`flex items-center space-x-2 px-3 py-2 rounded-md bg-green-600 hover:bg-green-500 transition-colors ${
+                  isChangingLanguage ? "opacity-75 cursor-wait" : ""
+                }`}
                 onClick={toggleLanguageDropdown}
+                disabled={isChangingLanguage}
+                aria-label="Change language"
               >
                 <img
                   src={getCurrentLanguage().flag}
@@ -87,24 +128,28 @@ const Header: React.FC = () => {
                 <span className="text-sm font-medium">
                   {getCurrentLanguage().name}
                 </span>
-                <svg
-                  className={`w-4 h-4 transition-transform ${
-                    isLanguageOpen ? "rotate-180" : ""
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
+                {isChangingLanguage ? (
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <svg
+                    className={`w-4 h-4 transition-transform ${
+                      isLanguageOpen ? "rotate-180" : ""
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                )}
               </button>
 
-              {isLanguageOpen && (
+              {isLanguageOpen && !isChangingLanguage && (
                 <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-[9999] overflow-hidden">
                   {availableLanguages.map((language) => (
                     <button
@@ -113,8 +158,13 @@ const Header: React.FC = () => {
                         currentLanguage === language.code
                           ? "bg-green-50 text-green-700"
                           : "text-gray-700"
+                      } ${
+                        currentLanguage === language.code
+                          ? "cursor-default"
+                          : ""
                       }`}
                       onClick={() => handleLanguageChange(language.code)}
+                      disabled={currentLanguage === language.code}
                     >
                       <img
                         src={language.flag}
@@ -124,6 +174,9 @@ const Header: React.FC = () => {
                       <span className="text-sm font-medium whitespace-nowrap">
                         {language.name}
                       </span>
+                      {currentLanguage === language.code && (
+                        <span className="ml-auto text-green-600">✓</span>
+                      )}
                     </button>
                   ))}
                 </div>
@@ -200,7 +253,7 @@ const Header: React.FC = () => {
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Blog
+                  {t("blog")}
                 </Link>
               </li>
               <li>
@@ -213,7 +266,7 @@ const Header: React.FC = () => {
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Achievement
+                  {t("achievement")}
                 </Link>
               </li>
               <li>
@@ -252,7 +305,7 @@ const Header: React.FC = () => {
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Q&A & Contact
+                  {t("qa_contact")}
                 </Link>
               </li>
             </ul>

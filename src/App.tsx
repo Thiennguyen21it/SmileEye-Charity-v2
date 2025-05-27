@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { LanguageProvider } from "./context/LanguageContext";
+import LanguageLoader from "./components/ui/LanguageLoader";
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
 import Home from "./pages/Home";
@@ -19,17 +20,19 @@ const App: React.FC = () => {
       <Router>
         <div className="min-h-screen bg-gray-50">
           <Header />
-          <main className="flex-grow">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/achievement" element={<Achievement />} />
-              <Route path="/contributors" element={<Contributors />} />
-              <Route path="/contribute" element={<Contribute />} />
-              <Route path="/qa-contact" element={<QAContact />} />
-            </Routes>
-          </main>
-          <Footer />
+          <LanguageLoader>
+            <main className="flex-grow">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/achievement" element={<Achievement />} />
+                <Route path="/contributors" element={<Contributors />} />
+                <Route path="/contribute" element={<Contribute />} />
+                <Route path="/qa-contact" element={<QAContact />} />
+              </Routes>
+            </main>
+            <Footer />
+          </LanguageLoader>
           <Toaster
             position="top-right"
             toastOptions={{
